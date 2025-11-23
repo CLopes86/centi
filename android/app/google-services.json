@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261078475530",
+    "project_id": "moneyflow-f4ebe",
+    "storage_bucket": "moneyflow-f4ebe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261078475530:android:788f78f8ec45b9021050f3",
+        "android_client_info": {
+          "package_name": "com.clopes.moneyflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1A8hsvGvu0kh40JHUf525g4gaN1ED7EU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
