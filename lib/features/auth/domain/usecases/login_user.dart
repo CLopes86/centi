@@ -7,4 +7,10 @@ class LoginUser {
   final AuthRepository repository;
 
   LoginUser(this.repository);
+
+  Future<User> call({required String email, required String password}) async {
+    final user = await repository.login(email: email, password: password);
+
+    return user;
+  }
 }
