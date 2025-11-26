@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://github.com/CLopes86.png" width="120" style="border-radius: 50%;" alt="Cesaltino Lopes"/>
   
   # 💰 MoneyFlow
   
@@ -8,10 +7,11 @@
   ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
   ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
   ![Riverpod](https://img.shields.io/badge/Riverpod-3DDC84?style=for-the-badge)
+  ![Clean Architecture](https://img.shields.io/badge/Clean%20Architecture-6C47FF?style=for-the-badge)
   
   **Status:** 🚧 In Development
   
-  [Features](#-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Roadmap](#-roadmap)
+  [Features](#-features) • [Tech Stack](#-tech-stack) • [Architecture](#-architecture) • [Progress](#-current-progress) • [Getting Started](#-getting-started)
   
 </div>
 
@@ -19,41 +19,57 @@
 
 ## 🎯 About
 
-**MoneyFlow** is a comprehensive personal finance management application built with Flutter. Track your expenses, set budgets, visualize spending patterns, and take control of your financial life with beautiful charts and AI-powered insights.
+**MoneyFlow** is a comprehensive personal finance management application built with Flutter following **Clean Architecture** principles. This project demonstrates professional-grade code structure, SOLID principles, and modern Flutter development practices.
 
 ### ✨ Key Highlights
 
-- 📊 **Beautiful Visualizations** - Interactive charts and graphs to understand your spending
+- 🏗️ **Clean Architecture** - Separation of concerns with Domain, Data, and Presentation layers
+- 📊 **Beautiful Visualizations** - Interactive charts and graphs to understand spending patterns
 - 💰 **Budget Management** - Set and track budgets per category
-- 🤖 **Smart Receipt Scanning** - AI-powered OCR to extract data from receipts
+- 🔥 **Firebase Integration** - Cloud sync, authentication, and real-time updates
 - 📱 **Cross-Platform** - Works on Android, iOS, and Web
-- 🔒 **Secure** - Biometric authentication and encrypted local storage
-- ☁️ **Cloud Sync** - Your data synced across all devices with Firebase
-- 🌓 **Dark Mode** - Easy on your eyes, day or night
+- 🔒 **Secure** - Firebase Authentication with email/password
+- ☁️ **Cloud Sync** - Data synced across all devices
+- 🎨 **Material Design 3** - Modern and intuitive UI
 
 ---
 
 ## 🚀 Features
 
-### ✅ Implemented
-- [x] Project setup with Clean Architecture
-- [x] Firebase integration
-- [ ] Authentication (Email/Password, Google)
-- [ ] Biometric authentication
+### ✅ Completed
+- [x] **Project Setup**
+  - Clean Architecture structure (Domain/Data/Presentation)
+  - Firebase integration (Auth, Firestore)
+  - Git workflow with professional commits
+- [x] **Domain Layer (Auth Feature)**
+  - User Entity with validation and immutability
+  - AuthRepository Interface (login, register, logout, getCurrentUser)
+  - 4 Use Cases: LoginUser, RegisterUser, LogoutUser, GetCurrentUser
+  - Dependency Injection pattern
+- [x] **Data Layer (Auth Feature - In Progress)**
+  - UserModel with JSON and Firebase conversion
+  - fromFirebase, fromJson, toJson methods
 
 ### 🚧 In Progress
+- [ ] **Data Layer (Auth Feature)**
+  - AuthRemoteDataSource (Firebase calls)
+  - AuthRepositoryImpl (Repository implementation)
+- [ ] **Presentation Layer (Auth Feature)**
+  - Login Screen
+  - Register Screen
+  - State management with Riverpod
+
+### 🔮 Planned
 - [ ] Transaction management (Add, Edit, Delete)
 - [ ] Category management
 - [ ] Budget tracking
-- [ ] Statistics dashboard
-
-### 🔮 Planned
+- [ ] Statistics dashboard with charts
 - [ ] Receipt scanning with OCR
 - [ ] Export to PDF
 - [ ] Multi-currency support
 - [ ] Recurring transactions
-- [ ] Financial insights with AI
-- [ ] Bill reminders
+- [ ] Dark mode
+- [ ] Biometric authentication
 
 ---
 
@@ -68,18 +84,160 @@
 ### Backend & Database
 - **Authentication:** Firebase Auth
 - **Cloud Database:** Cloud Firestore
-- **Storage:** Firebase Storage
-- **Local Cache:** Hive
+- **Storage:** Firebase Storage (planned)
+- **Local Cache:** Hive (planned)
 
-### UI/UX
-- **Charts:** FL Chart
-- **Animations:** Flutter Animate
-- **Icons:** Material Icons
+### Development Practices
+- **Version Control:** Git & GitHub
+- **Code Style:** Dart conventions
+- **Architecture Patterns:** Repository Pattern, Dependency Injection, Use Cases
+- **Principles:** SOLID, DRY, Clean Code
 
-### Additional Features
-- **OCR:** Google ML Kit
-- **PDF:** PDF & Printing packages
-- **Notifications:** Flutter Local Notifications
+---
+
+## 🏗️ Architecture
+
+This project follows **Clean Architecture** principles with strict separation of concerns:
+```
+lib/
+├── core/                       # Shared code
+│   ├── constants/             # App constants
+│   ├── utils/                 # Utility functions
+│   └── errors/                # Custom errors
+│
+└── features/
+    └── auth/                   # Authentication feature
+        │
+        ├── domain/             # ✅ COMPLETE - Business Logic Layer
+        │   ├── entities/
+        │   │   └── user.dart                    # User entity with validation
+        │   ├── repositories/
+        │   │   └── auth_repository.dart         # Repository interface
+        │   └── usecases/
+        │       ├── login_user.dart              # Login use case
+        │       ├── register_user.dart           # Register use case
+        │       ├── logout_user.dart             # Logout use case
+        │       └── get_current_user.dart        # Get current user use case
+        │
+        ├── data/               # 🚧 IN PROGRESS - Data Layer
+        │   ├── models/
+        │   │   └── user_model.dart              # ✅ User model with conversions
+        │   ├── datasources/
+        │   │   └── auth_remote_datasource.dart  # ⏳ Firebase calls (next)
+        │   └── repositories/
+        │       └── auth_repository_impl.dart    # ⏳ Repository implementation (next)
+        │
+        └── presentation/       # ⏳ TODO - UI Layer
+            ├── providers/      # Riverpod providers
+            ├── screens/        # Full screens
+            └── widgets/        # Reusable widgets
+```
+
+### Architecture Benefits
+
+✅ **Testability** - Each layer can be tested independently  
+✅ **Maintainability** - Clear structure, easy to navigate  
+✅ **Scalability** - Easy to add new features  
+✅ **Flexibility** - Can change implementations without affecting other layers  
+✅ **Independence** - Domain layer has zero dependencies on external frameworks  
+
+### Layer Responsibilities
+
+**🎯 Domain Layer (Business Logic)**
+- Defines what the app does
+- Contains entities (business objects)
+- Defines repository contracts
+- Implements use cases (business rules)
+- Framework-independent (pure Dart)
+
+**💾 Data Layer (Data Management)**
+- Implements repository contracts
+- Handles data sources (Firebase, APIs, local DB)
+- Converts between models and entities
+- Manages caching and synchronization
+
+**🎨 Presentation Layer (User Interface)**
+- Displays data to users
+- Handles user interactions
+- Manages UI state with Riverpod
+- Calls use cases, never repositories directly
+
+---
+
+## 📊 Current Progress
+
+### Domain Layer - Auth Feature ✅ 100%
+
+**User Entity**
+- Immutable data class with id, email, displayName
+- Constructor validation (empty checks, email format)
+- copyWith method for updates
+- Proper equals and hashCode
+
+**Repository Interface**
+- login(email, password) → Future<User>
+- register(email, password, displayName?) → Future<User>
+- logout() → Future<void>
+- getCurrentUser() → Future<User?>
+
+**Use Cases**
+- LoginUser - Handles user login
+- RegisterUser - Handles user registration  
+- LogoutUser - Handles logout
+- GetCurrentUser - Gets currently logged in user
+- All use cases implement Dependency Injection
+
+**Concepts Applied**
+- Clean Architecture principles
+- SOLID principles
+- Repository Pattern
+- Dependency Injection
+- Use Case Pattern
+- Future/async/await
+- Immutability
+
+### Data Layer - Auth Feature 🚧 33%
+
+**UserModel ✅**
+- Extends User entity
+- fromFirebase(firebase_auth.User) - Converts Firebase user
+- fromJson(Map) - Converts from JSON
+- toJson() - Converts to JSON
+- Factory constructors for conversions
+
+**Next Steps ⏳**
+- AuthRemoteDataSource - Direct Firebase calls
+- AuthRepositoryImpl - Connect Domain to Data
+
+---
+
+## 🗺️ Roadmap
+
+### Phase 1 - Foundation (Week 1-2) 🚧 75%
+- [x] Project setup with Clean Architecture
+- [x] Firebase configuration and integration
+- [x] Domain Layer complete (Entity, Repository, Use Cases)
+- [x] UserModel with conversions
+- [ ] DataSource and Repository implementation
+- [ ] Authentication screens (Login/Register)
+
+### Phase 2 - Core Features (Week 3-4)
+- [ ] Complete Authentication flow with UI
+- [ ] Transaction management (CRUD)
+- [ ] Category system
+- [ ] Basic statistics
+
+### Phase 3 - Advanced Features (Week 5-6)
+- [ ] Budget tracking and alerts
+- [ ] Charts and visualizations
+- [ ] Data export (PDF, CSV)
+- [ ] Dark mode
+
+### Phase 4 - Polish & Deploy (Week 7-8)
+- [ ] Animations and UI polish
+- [ ] Testing (Unit, Widget, Integration)
+- [ ] Performance optimization
+- [ ] Deploy to Google Play / App Store
 
 ---
 
@@ -97,93 +255,60 @@
 
 1. **Clone the repository**
 ```bash
-   git clone https://github.com/CLopes86/money-flow.git
-   cd money-flow
+git clone https://github.com/CLopes86/money-flow.git
+cd money-flow
 ```
 
 2. **Install dependencies**
 ```bash
-   flutter pub get
+flutter pub get
 ```
 
 3. **Configure Firebase**
-   - Create a Firebase project
-   - Add `google-services.json` (Android)
-   - Add `GoogleService-Info.plist` (iOS)
+   - Create a Firebase project at [Firebase Console](https://console.firebase.google.com)
+   - Enable Email/Password authentication
+   - Create Firestore database
+   - Download and add `google-services.json` (Android) to `android/app/`
+   - Download and add `GoogleService-Info.plist` (iOS) to `ios/Runner/`
 
 4. **Run the app**
 ```bash
-   flutter run
+flutter run
 ```
-
----
-
-## 🏗️ Architecture
-
-This project follows **Clean Architecture** principles with three main layers:
-```
-lib/
-├── core/                  # Core utilities, constants, themes
-├── features/              # Feature modules
-│   ├── auth/
-│   │   ├── data/         # Data sources, models, repositories
-│   │   ├── domain/       # Entities, use cases, repository interfaces
-│   │   └── presentation/ # UI, providers, widgets
-│   ├── transactions/
-│   └── ...
-└── injection.dart         # Dependency injection
-```
-
-**Benefits:**
-- ✅ Testable code
-- ✅ Independent of frameworks
-- ✅ Flexible and maintainable
-- ✅ Clear separation of concerns
-
----
-
-## 🗺️ Roadmap
-
-### Phase 1 (Week 1-2) - Foundation
-- [x] Project setup
-- [x] Clean Architecture structure
-- [ ] Firebase configuration
-- [ ] Authentication flow
-
-### Phase 2 (Week 3-4) - Core Features
-- [ ] Transaction management
-- [ ] Category system
-- [ ] Basic statistics
-
-### Phase 3 (Week 5-6) - Advanced Features
-- [ ] Budget tracking
-- [ ] Receipt scanning
-- [ ] Charts and visualizations
-
-### Phase 4 (Week 7-8) - Polish & Deploy
-- [ ] Animations and UI polish
-- [ ] Testing (Unit, Widget, Integration)
-- [ ] Deploy to stores
 
 ---
 
 ## 📚 Learning Journey
 
-This project is part of my learning path in Flutter development. Key concepts I'm mastering:
+This project showcases professional Flutter development practices:
 
-- ✅ Clean Architecture implementation
-- ✅ Advanced State Management with Riverpod
-- ✅ Firebase integration (Auth, Firestore, Storage)
-- ✅ Local database with Hive
-- ✅ Custom animations and transitions
-- ✅ ML Kit integration for OCR
-- ✅ Testing strategies (TDD)
+### Concepts Mastered ✅
+- **Clean Architecture** - Three-layer separation (Domain/Data/Presentation)
+- **SOLID Principles** - Single Responsibility, Dependency Inversion, etc.
+- **Repository Pattern** - Abstract data sources behind interfaces
+- **Use Cases** - Isolated business logic
+- **Dependency Injection** - Loose coupling between layers
+- **Factory Constructors** - Object creation patterns
+- **async/await** - Asynchronous programming
+- **Future & Stream** - Reactive programming concepts
+
+### Currently Learning 🚧
+- **Riverpod** - Modern state management
+- **Firebase Integration** - Auth, Firestore, Storage
+- **Testing** - Unit tests, widget tests
+- **Error Handling** - Either type, custom exceptions
+
+### Next Steps 🔮
+- **Advanced UI** - Animations, custom painters
+- **ML Kit** - OCR for receipt scanning
+- **Performance** - Optimization techniques
+- **CI/CD** - Automated testing and deployment
 
 ---
 
-## 📸 Screenshots
+## 📄 License
 
-> Coming soon! Screenshots will be added as features are completed.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -194,21 +319,18 @@ This project is part of my learning path in Flutter development. Key concepts I'
   
   ### **Cesaltino Lopes**
   
-  🎓 Computer Science & Multimedia Student @ IPCB  
-  💻 Aspiring Mobile Developer | Flutter Enthusiast  
-  🚀 Building apps that matter
+  🎓 3rd Year - Computer Science & Multimedia @ IPCB  
+  💻 Mobile Developer | Flutter Enthusiast  
+  🚒 Volunteer Firefighter since 2023  
+  🚀 Building professional-grade applications
   
   [![GitHub](https://img.shields.io/badge/GitHub-CLopes86-181717?style=for-the-badge&logo=github)](https://github.com/CLopes86)
   [![LinkedIn](https://img.shields.io/badge/LinkedIn-Cesaltino%20Lopes-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/cesaltino-lopes-55274b176)
   [![Email](https://img.shields.io/badge/Email-clopes86cv-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:clopes86cv@gmail.com)
   
+  📍 Portugal | 🌐 Open to opportunities
+  
 </div>
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -216,8 +338,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 💡 "Building the future, one line of code at a time"
 
-**Made with 💙 and Flutter**
+**Made with 💙, Flutter, and Clean Architecture**
 
-⭐ If you like this project, give it a star!
+⭐ **Star this repo if you find it useful!**
+
+---
+
+### 📈 Project Stats
+
+![Commits](https://img.shields.io/github/commit-activity/m/CLopes86/money-flow?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/CLopes86/money-flow?style=flat-square)
+![Code Size](https://img.shields.io/github/languages/code-size/CLopes86/money-flow?style=flat-square)
 
 </div>
