@@ -1,4 +1,4 @@
-// MoneyFlow - Aplicação de Gestão de Despesas Pessoais
+// Penny - Aplicação de Gestão de Despesas Pessoais
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,14 +24,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MoneyFlow',
+      title: 'Penny',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const Scaffold(
-        body: Center(child: Text('MoneyFlow - Setup Completo!')),
+        body: Center(child: Text('Penny - Setup Completo!')),
       ),
     );
   }

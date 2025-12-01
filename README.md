@@ -1,6 +1,6 @@
 <div align="center">
   
-  # 💰 MoneyFlow
+  # 💰 Penny
   
   ### Advanced Personal Finance Tracker
   
@@ -19,7 +19,7 @@
 
 ## 🎯 About
 
-**MoneyFlow** is a comprehensive personal finance management application built with Flutter following **Clean Architecture** principles. This project demonstrates professional-grade code structure, SOLID principles, and modern Flutter development practices.
+**Penny** is a comprehensive personal finance management application built with Flutter following **Clean Architecture** principles. This project demonstrates professional-grade code structure, SOLID principles, and modern Flutter development practices.
 
 ### ✨ Key Highlights
 
