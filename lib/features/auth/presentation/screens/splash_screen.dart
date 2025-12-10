@@ -14,6 +14,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:penny/features/auth/presentation/screens/login_screen.dart';
 import 'dart:async';
 import '../controllers/auth_controller.dart';
 
@@ -79,26 +80,31 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   // ============================================
   //
   void _navigateToNextScreen() {
-    Timer(const Duration(seconds: 3), () {
-      final authState = ref.read(authControllerProvider);
+    Timer(const Duration(seconds: 3), () async {
+      // Usar .future permite esperar que o carregamento termine, se ainda estiver loading
+      try {
+        final user = await ref.read(authControllerProvider.future);
 
-      authState.when(
-        loading: () {
-          print('🔄 Ainda a verificar autenticação...');
-        },
-
-        error: (error, stack) {
-          print('❌ Erro na autenticação. Indo para Login...');
-        },
-
-        data: (user) {
-          if (user != null) {
-            print('✅ User logado: ${user.email}. Indo para Dashboard...');
-          } else {
-            print('🔓 Nenhum user logado. Indo para Login...');
+        if (user != null) {
+          print('✅ User logado: ${user.email}. Indo para Dashboard...');
+          // TODO: Navegar para Dashboard
+        } else {
+          print('🔓 Nenhum user logado. Indo para Login...');
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
           }
-        },
-      );
+        }
+      } catch (e) {
+        print('❌ Erro na autenticação ($e). Indo para Login...');
+        // Em caso de erro, também vamos para o login por segurança
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      }
     });
   }
 
