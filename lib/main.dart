@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:penny/core/theme/app_theme.dart';
 import 'package:penny/features/auth/presentation/screens/splash_screen.dart';
 import 'firebase_options.dart';
 
@@ -12,7 +13,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Inicializa Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Erro ao inicializar Firebase: $e");
+  }
 
   // Inicia app com ProviderScope (necessário para Riverpod)
   runApp(const ProviderScope(child: MyApp()));
@@ -27,10 +34,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Penny',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme, // Usa o tema personalizado
       home: const SplashScreen(),
     );
   }

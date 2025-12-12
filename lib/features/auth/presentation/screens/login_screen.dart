@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../controllers/auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -25,6 +26,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Escuta mudanças no estado de autenticação
+    ref.listen(authControllerProvider, (previous, next) {
+      next.when(
+        data: (user) {
+          if (user != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Login com sucesso! Bem-vindo'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            // TODO: Navegar para Dashboard
+          }
+        },
+        error: (error, stack) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro: ${error.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+
+        loading: () {
+          // Opcional: Podía mostrar um loading overlay aqui
+        },
+      );
+    });
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -38,32 +68,54 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   Image.asset('assets/images/penny_logo.png', height: 120),
                   const SizedBox(height: 32),
+
+                  // Título e Subtítulo
+                  Text(
+                    'Bem-vindo de volta',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F2937),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Faça login para gerir as suas finanças',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: Color(0xFF9CA3AF)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Email Input
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Email',
                       prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(),
+                      hintText: 'exemplo@email.com',
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, insira o seu email';
                       }
                       if (!value.contains('@')) {
-                        return 'O email não é valido';
+                        return 'O email não é válido';
                       }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
+
+                  // Password Input
                   TextFormField(
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       prefixIcon: const Icon(Icons.lock_outline),
-                      border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isPasswordVisible
@@ -77,6 +129,55 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         },
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira a password';
+                      }
+                      if (value.length < 6) {
+                        return 'A password deve ter pelo menos 6 caracteres';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  // Esqueci password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text('Esqueceu a password?'),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Botão de Login
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        ref
+                            .read(authControllerProvider.notifier)
+                            .login(
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+                      }
+                    },
+                    child: const Text('Entrar'),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Não tem conta?',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('Registar-se'),
+                      ),
+                    ],
                   ),
                 ],
               ),
