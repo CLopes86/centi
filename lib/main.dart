@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Penny',
+      title: 'Centi',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme, // Usa o tema personalizado
       home: const SplashScreen(),

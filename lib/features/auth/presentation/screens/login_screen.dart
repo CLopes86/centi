@@ -77,7 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Image.asset('assets/images/penny_logo.png', height: 120),
+                  Image.asset('assets/images/fox_logo.png', height: 120),
                   const SizedBox(height: 32),
 
                   // Título e Subtítulo

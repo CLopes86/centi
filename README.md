@@ -1,8 +1,9 @@
 <div align="center">
   
-  # 💰 Penny
+  # 🦊 Centi
   
-  ### Advanced Personal Finance Tracker
+  ### The AI-Powered Finance Tracker
+
   
   ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
   ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
@@ -19,7 +20,7 @@
 
 ## 🎯 About
 
-**Penny** is a comprehensive personal finance management application built with Flutter following **Clean Architecture** principles. This project demonstrates professional-grade code structure, SOLID principles, and modern Flutter development practices.
+**Centi** is a comprehensive personal finance management application built with Flutter following **Clean Architecture** principles. This project demonstrates professional-grade code structure, SOLID principles, and modern Flutter development practices.
 
 ### ✨ Key Highlights
 
