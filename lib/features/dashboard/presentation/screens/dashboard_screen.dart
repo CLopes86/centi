@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:penny/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:penny/features/auth/presentation/screens/login_screen.dart';
+import 'package:centi/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:centi/features/auth/presentation/screens/login_screen.dart';
 
 /// Ecrã Principal (Dashboard)
 ///

@@ -1,7 +1,7 @@
 // Teste do Data Layer - UserModel
 import 'package:flutter_test/flutter_test.dart';
-import 'package:penny/features/auth/data/models/user_model.dart';
-import 'package:penny/features/auth/domain/entities/user.dart';
+import 'package:centi/features/auth/data/models/user_model.dart';
+import 'package:centi/features/auth/domain/entities/user.dart';
 
 void main() {
   group('Data Layer Tests', () {

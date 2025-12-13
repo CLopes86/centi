@@ -1,5 +1,5 @@
-name: penny
-description: "Your smart financial companion - Every penny counts"
+name: centi
+description: "The AI-Powered Finance Tracker - Your Money, to the Cent"
 publish_to: 'none'
 
 version: 1.0.0+1

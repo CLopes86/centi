@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:penny/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:centi/features/auth/data/datasources/auth_remote_datasource.dart';
 
 // Gera mocks automaticamente
 @GenerateMocks([FirebaseAuth, UserCredential, User])

@@ -14,8 +14,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:penny/features/auth/presentation/screens/login_screen.dart';
-import 'package:penny/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:centi/features/auth/presentation/screens/login_screen.dart';
+import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'dart:async';
 import '../controllers/auth_controller.dart';
 
