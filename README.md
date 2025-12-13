@@ -66,17 +66,24 @@
 - [ ] **Presentation Layer (Auth Feature)**
   - Register Screen (Connecting logic)
 
-### 🔮 Planned
-- [ ] Transaction management (Add, Edit, Delete)
-- [ ] Category management
-- [ ] Budget tracking
-- [ ] Statistics dashboard with charts
-- [ ] Receipt scanning with OCR
-- [ ] Export to PDF
-- [ ] Multi-currency support
-- [ ] Recurring transactions
-- [ ] Dark mode
-- [ ] Biometric authentication
+### 🔮 Planned (MVP Portugal)
+
+**🏆 Differentiators (Why users switch)**
+- [ ] **🇵🇹 IRS Refund Gamification** - Live progress bar for tax benefits (15% VAT)
+- [ ] **💳 MB WAY Smart Decoder** - Aliases for phone numbers (e.g. 9123... -> "Landlord")
+- [ ] **🍽️ Meal Card Tracker** - Separated balance with "Quick Lunch" button
+- [ ] **📈 Savings Certificates** - Auto-calculation for Series E/F interest
+
+**🛡️ Essentials (Trust & Security)**
+- [ ] **🔒 Privacy First** - Local-only database (SQLite/Isar) option
+- [ ] **🏦 Open Banking** - Connect to PT Banks (CGD, BCP, Activo) via GoCardless
+- [ ] **🔐 Biometric Security** - FaceID / TouchID
+- [ ] **💶 Multi-Currency** - Auto-convert GBP/CHF/PLN to EUR
+
+**⚓ Retention (Daily Use)**
+- [ ] **📅 Subscription Detector** - Alerts for tomorrow's Netflix/Spotify charge
+- [ ] **🚦 Traffic Light Budgets** - Visual limits (Green/Yellow/Red)
+- [ ] **📊 Smart Analytics** - Spending by category & evolution charts
 
 ---
 
