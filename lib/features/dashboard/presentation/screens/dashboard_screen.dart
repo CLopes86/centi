@@ -10,33 +10,20 @@ import 'package:centi/features/auth/presentation/screens/login_screen.dart';
 ///
 /// Utiliza [ref.watch] para garantir que o estado de autenticação é monitorizado
 /// e evitar erros de "Provider disposed".
-class DashboardScreen extends ConsumerWidget {
+
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(authControllerProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              // 1. Fazer Logout no Firebase
-              await ref.read(authControllerProvider.notifier).logout();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
 
-              // 2. Voltar para o Login
-              if (context.mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-      body: const Center(child: Text('Bem-vindo à Penny! 💰')),
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  // 1. Variável de Estado: Guarda qual o separador (tab) selecionado
+  int _selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text('Dashboard Tab: $_selectedIndex')),
     );
   }
 }
