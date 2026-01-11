@@ -20,6 +20,36 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   // 1. Variável de Estado: Guarda qual o separador (tab) selecionado
   int _selectedIndex = 0;
+
+  List<Widget> get _screens => [
+    // 1. Início (Home)
+    SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Olá, Cesaltino! 👋',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+            const Text(
+              'Bem-vindo de volta',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            // Aqui virá o Cartão de Saldo depois...
+          ],
+        ),
+      ),
+    ),
+
+    // 2. Perfil (Placeholder)
+    const Center(child: Text('👤 Perfil')),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

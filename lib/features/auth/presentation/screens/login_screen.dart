@@ -1,3 +1,4 @@
+import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/auth_controller.dart';
@@ -49,6 +50,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
             );
             // TODO: Navegar para Dashboard
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+            );
           }
         },
         error: (error, stack) {

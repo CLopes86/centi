@@ -1,3 +1,4 @@
+import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/auth_controller.dart';
@@ -41,6 +42,34 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider).isLoading;
+
+    ref.listen(authControllerProvider, (previous, next) {
+      next.when(
+        data: (user) {
+          if (user != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Conta criada com sucesso! 🚀'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            // Navegar para o Dashboard
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+            );
+          }
+        },
+        error: (error, stack) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro: ${error.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+        loading: () {},
+      );
+    });
 
     return Scaffold(
       extendBodyBehindAppBar: true,
