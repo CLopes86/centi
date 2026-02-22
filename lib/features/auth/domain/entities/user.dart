@@ -2,6 +2,7 @@
 ///
 /// Esta é uma entidade de domínio pura, sem dependências externas.
 /// Contém apenas as propriedades essenciais de um utilizador e validações básicas.
+library;
 
 /// Entidade que representa um utilizador no domínio da aplicação.
 class User {

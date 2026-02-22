@@ -2,6 +2,7 @@
 ///
 /// Define o contrato que as implementações de autenticação devem seguir.
 /// Esta interface pertence à camada de domínio e não deve ter dependências externas.
+library;
 
 import '../entities/user.dart';
 

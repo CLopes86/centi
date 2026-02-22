@@ -167,7 +167,7 @@ void main() {
   });
 
   test('📊 RESUMO: AuthRemoteDataSource', () {
-    print('\n' + '=' * 60);
+    print('\n${'=' * 60}');
     print('✅ TODOS OS TESTES DO AuthRemoteDataSource PASSARAM!');
     print('=' * 60);
     print('Métodos testados:');

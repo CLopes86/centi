@@ -77,7 +77,7 @@ void main() {
     });
 
     test('Resumo Final', () {
-      print('\n' + '=' * 50);
+      print('\n${'=' * 50}');
       print('✅ TODOS OS TESTES PASSARAM!');
       print('\n📸 Código compilou sem erros!');
       print('🎉 Data Layer está correto!\n');

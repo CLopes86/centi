@@ -14,8 +14,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/login_user.dart';
-import '../../domain/usecases/register_user.dart';
-import '../../domain/usecases/logout_user.dart';
 import '../../domain/usecases/get_current_user.dart';
 import '../providers/auth_providers.dart';
 import 'package:local_auth/local_auth.dart';

@@ -17,7 +17,7 @@ Este workflow executa o app Android com configurações otimizadas para evitar t
 // turbo
 2. **Executar em modo verbose**
    ```bash
-   flutter run -d R5CY640EVVH -v
+   flutter run -v
    ```
    O modo verbose mostra o progresso do build em tempo real, para você saber que não travou.
 
