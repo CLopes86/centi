@@ -43,6 +43,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final String loc = state.uri.toString();
       final bool loggingIn = loc == '/login' || loc == '/register';
 
+      if (loc == '/splash') return null;
+
       // Se não estiver logado e tentar aceder a uma página protegida,
       // redireciona para login.
       if (!loggedIn && !loggingIn) return '/login';
