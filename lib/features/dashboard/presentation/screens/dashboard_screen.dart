@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:centi/features/dashboard/presentation/widgets/balance_card.dart';
 
-/// Ecrã Principal (Dashboard)
 ///
 /// A primeira tela que o utilizador vê após um login bem-sucedido.
 /// Atualmente exibe uma mensagem de boas-vindas e um botão de Logout.
@@ -40,6 +40,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
             // Aqui virá o Cartão de Saldo depois...
+            const SizedBox(height: 12),
+            BalanceCard(balance: 1234.56, income: 2450.00, expenses: 1215.44),
           ],
         ),
       ),
@@ -51,12 +53,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          'Tab Selecionada: $_selectedIndex',
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
