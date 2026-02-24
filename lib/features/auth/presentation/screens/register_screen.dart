@@ -1,7 +1,7 @@
-import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/auth_controller.dart';
+import 'package:go_router/go_router.dart';
 
 /// Ecrã de Registo
 ///
@@ -44,6 +44,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final isLoading = ref.watch(authControllerProvider).isLoading;
 
     ref.listen(authControllerProvider, (previous, next) {
+      if (!mounted) return;
       next.when(
         data: (user) {
           if (user != null) {
@@ -54,9 +55,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
             );
             // Navegar para o Dashboard
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            );
+            context.go('/dashboard');
           }
         },
         error: (error, stack) {

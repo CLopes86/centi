@@ -14,8 +14,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:centi/features/auth/presentation/screens/login_screen.dart';
-import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 import '../controllers/auth_controller.dart';
 
@@ -38,6 +37,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
   late Animation<double> _glowAnimation; // Nova animação para o brilho
+  Timer? _navigationTimer;
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   void _navigateToNextScreen() {
     // Tempo total: 8 segundos (para apreciar a animação)
-    Timer(const Duration(seconds: 8), () async {
+    _navigationTimer = Timer(const Duration(seconds: 8), () async {
       try {
         // Verifica o estado de autenticação via Riverpod
         final user = await ref.read(authControllerProvider.future);
@@ -88,22 +88,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         if (mounted) {
           if (user != null) {
             print('✅ Centi: Bem-vindo de volta, ${user.email}');
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            );
+            context.go('/dashboard');
           } else {
             print('🔓 Centi: Novo acesso ou convidado');
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
+            context.go('/login');
           }
         }
       } catch (e) {
         print('❌ Erro Auth: $e');
         if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
+          context.go('/login');
         }
       }
     });
@@ -111,6 +105,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   void dispose() {
+    _navigationTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }

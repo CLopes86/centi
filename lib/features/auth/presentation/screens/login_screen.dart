@@ -1,8 +1,8 @@
-import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/auth_controller.dart';
 import 'package:centi/features/auth/presentation/screens/register_screen.dart';
+import 'package:go_router/go_router.dart';
 
 /// Ecrã de Login
 ///
@@ -40,6 +40,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // ref.listen: "Escuta" mudanças sem reconstruir o widget inteiro.
     // Ideal para mostrar diálogos, SnackBars ou navegação baseada em estado.
     ref.listen(authControllerProvider, (previous, next) {
+      if (!mounted) return;
       next.when(
         data: (user) {
           if (user != null) {
@@ -49,10 +50,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 backgroundColor: Colors.green,
               ),
             );
-            // TODO: Navegar para Dashboard
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            );
+            context.go('/dashboard');
           }
         },
         error: (error, stack) {
@@ -341,11 +339,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen(),
-                                ),
-                              );
+                              context.push('/register');
                             },
                             child: const Text('Registar-se'),
                           ),
