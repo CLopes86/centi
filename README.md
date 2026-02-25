@@ -61,11 +61,16 @@
   - [x] State management with Riverpod
 - [x] **Core**
   - [x] App Theme (Indigo + Gold palette)
-  - [/] Dashboard (Basic implementation)
+  - [x] GoRouter (Centralized navigation)
+- [x] **Dashboard (In Progress)**
+  - [x] BalanceCard widget
+  - [x] TransactionItem widget
+  - [x] Transactions list (placeholder data)
 
 ### 🚧 In Progress
-- [ ] **Presentation Layer (Auth Feature)**
-  - Register Screen (Connecting logic)
+- [ ] **Dashboard**
+  - [ ] Redesign moderno (gradiente + scroll)
+  - [ ] Dados reais do Firestore
 
 ### 🔮 Planned (MVP Portugal)
 
@@ -99,7 +104,8 @@
 ### Core
 - **Framework:** Flutter 3.x
 - **Language:** Dart 3.x
-- **State Management:** Riverpod 2.x
+- **State Management:** Riverpod 3.x
+- **Navigation:** GoRouter 17.x
 - **Architecture:** Clean Architecture
 
 ### Backend & Database
@@ -156,7 +162,8 @@ lib/
     │
     └── dashboard/              # 🚧 IN PROGRESS - Dashboard Feature
         └── presentation/
-            └── screens/        # DashboardScreen
+            ├── screens/        # DashboardScreen
+            └── widgets/        # BalanceCard, TransactionItem
 ```
 
 ### Architecture Benefits
@@ -235,31 +242,44 @@ lib/
 - AuthRemoteDataSource - Implemented with Firebase Auth
 - AuthRepositoryImpl - Connects Domain to Data layers
 
-### Presentation Layer - Auth Feature 🚧 70%
+### Presentation Layer - Auth Feature ✅ 100%
 
 **Screens**
-- Splash Screen: Animated with auth check ✅
-- Login Screen: UI, Validation, Riverpod Integration ✅
-- Register Screen: UI Structure created 🚧
+- Splash Screen: Animated with auth check, Timer dispose ✅
+- Login Screen: UI, Validation, GoRouter, mounted guard ✅
+- Register Screen: UI, Validation, GoRouter, mounted guard ✅
 
 **State Management**
 - AuthController (AsyncNotifierProvider) handles all logic
 - Global Error Handling via SnackBars
+- GoRouter centralized navigation
+
+### Presentation Layer - Dashboard Feature 🚧 40%
+
+**Widgets**
+- BalanceCard: saldo total, receitas, despesas ✅
+- TransactionItem: linha reutilizável de transação ✅
+
+**Screens**
+- DashboardScreen: BottomNavigationBar + lista placeholder ✅
+- Redesign moderno com scroll 🚧
 
 ---
 
 ## 🗺️ Roadmap
 
-### Phase 1 - Foundation (Week 1-2) 🚧 75%
+### Phase 1 - Foundation (Week 1-2) ✅ 100%
 - [x] Project setup with Clean Architecture
 - [x] Firebase configuration and integration
 - [x] Domain Layer complete (Entity, Repository, Use Cases)
 - [x] UserModel with conversions
 - [x] DataSource and Repository implementation
-- [ ] Authentication screens (Login/Register)
+- [x] Authentication screens (Login/Register/Splash)
+- [x] GoRouter centralized navigation
 
-### Phase 2 - Core Features (Week 3-4)
-- [ ] Complete Authentication flow with UI
+### Phase 2 - Core Features (Week 3-4) 🚧 20%
+- [x] Dashboard base with BalanceCard and TransactionItem
+- [ ] Dashboard redesign moderno
 - [ ] Transaction management (CRUD)
 - [ ] Category system
 - [ ] Basic statistics
@@ -292,8 +312,8 @@ lib/
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/CLopes86/money-flow.git
-cd money-flow
+git clone https://github.com/CLopes86/centi.git
+cd centi
 ```
 
 2. **Install dependencies**
