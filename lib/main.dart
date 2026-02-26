@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:centi/core/theme/app_theme.dart';
 import 'package:centi/core/routes/app_router.dart';
-import 'package:centi/features/auth/presentation/screens/splash_screen.dart';
 import 'firebase_options.dart';
 
 /// Ponto de entrada da aplicação.

@@ -21,90 +21,120 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   int _selectedIndex = 0;
 
   List<Widget> get _screens => [
-    // 1. Início (Home)
-    SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Olá, Cesaltino! 👋',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1F2937),
-              ),
-            ),
-            const Text(
-              'Bem-vindo de volta',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-            // Aqui virá o Cartão de Saldo depois...
-            const SizedBox(height: 12),
-            BalanceCard(balance: 1234.56, income: 2450.00, expenses: 1215.44),
-            const SizedBox(height: 24),
+    Column(
+      children: [
+        Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
 
-            // CABEÇALHO DA SECÇÃO
-            // Row com o título à esquerda e "Ver todas" à direita
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Transações Recentes',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {}, // Por agora não faz nada
-                  child: const Text('Ver todas'),
-                ),
+              colors: [
+                Color(0xFF6366F1), // Indigo — cor primária da app
+                Color(0xFF8B5CF6),
               ],
             ),
-
-            const SizedBox(height: 8),
-
-            // LISTA DE TRANSAÇÕES (dados falsos por agora)
-            // Cada TransactionItem representa uma transação
-            TransactionItem(
-              icon: Icons.shopping_cart,
-              title: 'Supermercado',
-              amount: 45.00,
-              date: '24 Fev',
-              isExpense: true,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(32),
+              bottomRight: Radius.circular(32),
             ),
-            TransactionItem(
-              icon: Icons.local_pharmacy,
-              title: 'Farmácia',
-              amount: 12.50,
-              date: '23 Fev',
-              isExpense: true,
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Olá, Cesaltino! 👋',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    '25 de Frevereiro de 2026',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  const SizedBox(height: 20),
+                  BalanceCard(
+                    balance: 1234.56,
+                    income: 2450.00,
+                    expenses: 1215.89,
+                  ),
+                ],
+              ),
             ),
-            TransactionItem(
-              icon: Icons.account_balance_wallet,
-              title: 'Salário',
-              amount: 1200.00,
-              date: '22 Fev',
-              isExpense: false, // false = receita → verde
-            ),
-            TransactionItem(
-              icon: Icons.restaurant,
-              title: 'Restaurante',
-              amount: 28.00,
-              date: '21 Fev',
-              isExpense: true,
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
+        Expanded(
+          child: Container(
+            color: const Color(0xFFF0F2F5),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Transaçoes Recentes',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('Ver todas'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
 
-    // 2. Perfil (Placeholder)
-    const Center(child: Text('👤 Perfil')),
+                  // Lista de transações (dados falsos por agora)
+                  TransactionItem(
+                    icon: Icons.shopping_cart,
+                    title: 'Supermercado',
+                    amount: 45.00,
+                    date: '24 Fev',
+                    isExpense: true,
+                  ),
+                  TransactionItem(
+                    icon: Icons.local_pharmacy,
+                    title: 'Farmácia',
+                    amount: 12.50,
+                    date: '23 Fev',
+                    isExpense: true,
+                  ),
+                  TransactionItem(
+                    icon: Icons.account_balance_wallet,
+                    title: 'Salário',
+                    amount: 1200.00,
+                    date: '22 Fev',
+                    isExpense: false,
+                  ),
+                  TransactionItem(
+                    icon: Icons.restaurant,
+                    title: 'Restaurante',
+                    amount: 28.00,
+                    date: '21 Fev',
+                    isExpense: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
