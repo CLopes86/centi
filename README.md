@@ -62,14 +62,23 @@
 - [x] **Core**
   - [x] App Theme (Indigo + Gold palette)
   - [x] GoRouter (Centralized navigation)
-- [x] **Dashboard (In Progress)**
-  - [x] BalanceCard widget
-  - [x] TransactionItem widget
+- [x] **Dashboard (UI completo — dados placeholder)**
+  - [x] BalanceCard widget (estilo fintech — efeito vidro, setas néon)
+  - [x] TransactionItem widget (ícones, cores receita/despesa)
   - [x] Transactions list (placeholder data)
+  - [x] Header com gradiente indigo/roxo
+  - [x] SingleChildScrollView (sem overflow)
+  - [x] Pacote `intl` instalado (datas em português)
 
 ### 🚧 In Progress
-- [ ] **Dashboard**
-  - [ ] Redesign moderno (gradiente + scroll)
+- [ ] **Transactions Feature (Domain Layer)**
+  - [ ] Transaction entity (id, amount, type, category, date, userId)
+  - [ ] TransactionRepository interface
+  - [ ] Use Cases: AddTransaction, GetTransactions, DeleteTransaction
+- [ ] **Dashboard — Pendente após Transactions**
+  - [ ] Data dinâmica + nome real do utilizador
+  - [ ] Drawer lateral moderno (perfil, definições, MVP Portugal)
+  - [ ] Speed Dial FAB (↑ Receita / ↓ Despesa)
   - [ ] Dados reais do Firestore
 
 ### 🔮 Planned (MVP Portugal)
@@ -254,15 +263,16 @@ lib/
 - Global Error Handling via SnackBars
 - GoRouter centralized navigation
 
-### Presentation Layer - Dashboard Feature 🚧 40%
+### Presentation Layer - Dashboard Feature 🚧 70%
 
 **Widgets**
-- BalanceCard: saldo total, receitas, despesas ✅
-- TransactionItem: linha reutilizável de transação ✅
+- BalanceCard: efeito vidro, gradiente, setas néon, formato europeu ✅
+- TransactionItem: ícone circular, cor por tipo ✅
 
 **Screens**
-- DashboardScreen: BottomNavigationBar + lista placeholder ✅
-- Redesign moderno com scroll 🚧
+- DashboardScreen: header gradiente + scroll + lista placeholder ✅
+- Data dinâmica + nome utilizador 🚧
+- Drawer lateral + Speed Dial FAB 🚧 (aguarda Transactions)
 
 ---
 
@@ -277,10 +287,13 @@ lib/
 - [x] Authentication screens (Login/Register/Splash)
 - [x] GoRouter centralized navigation
 
-### Phase 2 - Core Features (Week 3-4) 🚧 20%
+### Phase 2 - Core Features (Week 3-4) 🚧 40%
 - [x] Dashboard base with BalanceCard and TransactionItem
-- [ ] Dashboard redesign moderno
-- [ ] Transaction management (CRUD)
+- [x] Dashboard redesign moderno (gradiente + scroll + fintech style)
+- [ ] **Transactions Domain Layer** (entity + repository + use cases)
+- [ ] **Transactions Data Layer** (Firestore + model)
+- [ ] **Transactions Presentation** (Speed Dial + formulário + providers)
+- [ ] Dashboard com dados reais + Drawer + Perfil
 - [ ] Category system
 - [ ] Basic statistics
 
