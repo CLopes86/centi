@@ -71,10 +71,14 @@
   - [x] Pacote `intl` instalado (datas em português)
 
 ### 🚧 In Progress
-- [ ] **Transactions Feature (Domain Layer)**
-  - [ ] Transaction entity (id, amount, type, category, date, userId)
-  - [ ] TransactionRepository interface
-  - [ ] Use Cases: AddTransaction, GetTransactions, DeleteTransaction
+- [x] **Transactions Feature (Domain Layer)** ✅
+  - [x] Transaction entity (id, amount, type, category, date, userId)
+  - [x] TransactionRepository interface
+  - [x] Use Cases: AddTransaction, GetTransactions, DeleteTransaction
+- [ ] **Transactions Feature (Data Layer)**
+  - [ ] TransactionModel (fromFirestore, toFirestore)
+  - [ ] TransactionRemoteDataSource (Firestore calls)
+  - [ ] TransactionRepositoryImpl
 - [ ] **Dashboard — Pendente após Transactions**
   - [ ] Data dinâmica + nome real do utilizador
   - [ ] Drawer lateral moderno (perfil, definições, MVP Portugal)
@@ -128,6 +132,19 @@
 - **Code Style:** Dart conventions
 - **Architecture Patterns:** Repository Pattern, Dependency Injection, Use Cases
 - **Principles:** SOLID, DRY, Clean Code
+
+### UI Polish Packages (Phase 3 — após funcionalidade completa)
+> Regra: Funcionalidade → Dados reais → Polimento UI
+
+| Package | Uso no Centi | Prioridade |
+|---|---|---|
+| `salomon_bottom_bar` | Bottom navigation animada (estilo fintech) | ⭐ Alta |
+| `loading_animation_widget` | Substituir `CircularProgressIndicator` no login/register | ⭐ Alta |
+| `awesome_snackbar_content` | SnackBars animados de sucesso/erro | 🔶 Média |
+| `top_snackbar_flutter` | ❌ Duplica `awesome_snackbar_content` — não usar | — |
+| `animated_bottom_navigation_bar` | ❌ `salomon_bottom_bar` é melhor para fintech | — |
+| `card_swiper` | Onboarding swipe — não está no roadmap atual | 🔷 Baixa |
+| `avatar_glow` | Glow animado em avatares/ícones | 🔷 Baixa |
 
 ---
 
@@ -263,6 +280,24 @@ lib/
 - Global Error Handling via SnackBars
 - GoRouter centralized navigation
 
+### Domain Layer - Transactions Feature ✅ 100%
+
+**Transaction Entity**
+- `TransactionType` enum (income / expense)
+- Immutable data class com 7 campos
+- Validações: id, userId, amount > 0, category
+- `copyWith` para atualizações imutáveis
+
+**Repository Interface**
+- `addTransaction(Transaction)` → Future<void>
+- `getTransactions(userId)` → Stream<List<Transaction>>
+- `deleteTransaction(transactionId)` → Future<void>
+
+**Use Cases**
+- `AddTransaction` — guarda transação via repository
+- `GetTransactions` — Stream em tempo real por userId
+- `DeleteTransaction` — apaga pelo id
+
 ### Presentation Layer - Dashboard Feature 🚧 70%
 
 **Widgets**
@@ -287,10 +322,10 @@ lib/
 - [x] Authentication screens (Login/Register/Splash)
 - [x] GoRouter centralized navigation
 
-### Phase 2 - Core Features (Week 3-4) 🚧 40%
+### Phase 2 - Core Features (Week 3-4) 🚧 60%
 - [x] Dashboard base with BalanceCard and TransactionItem
 - [x] Dashboard redesign moderno (gradiente + scroll + fintech style)
-- [ ] **Transactions Domain Layer** (entity + repository + use cases)
+- [x] **Transactions Domain Layer** (entity + repository + use cases)
 - [ ] **Transactions Data Layer** (Firestore + model)
 - [ ] **Transactions Presentation** (Speed Dial + formulário + providers)
 - [ ] Dashboard com dados reais + Drawer + Perfil
