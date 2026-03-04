@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:centi/features/dashboard/presentation/widgets/balance_card.dart';
 import 'package:centi/features/dashboard/presentation/widgets/transaction_item.dart';
+import 'package:go_router/go_router.dart';
 
 ///
 /// A primeira tela que o utilizador vê após um login bem-sucedido.
@@ -139,6 +140,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_selectedIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/addtransaction'),
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
