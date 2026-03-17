@@ -6,6 +6,7 @@ class TransactionItem extends StatelessWidget {
   final double amount;
   final String date;
   final bool isExpense;
+  final VoidCallback? onDelete;
 
   const TransactionItem({
     super.key,
@@ -14,6 +15,7 @@ class TransactionItem extends StatelessWidget {
     required this.amount,
     required this.date,
     required this.isExpense,
+    this.onDelete,
   });
 
   @override
@@ -70,17 +72,31 @@ class TransactionItem extends StatelessWidget {
             ),
           ),
           Text(
-            '$amountSign ${amount.toStringAsFixed(2)} €',
-            // toStringAsFixed(2) = mostra sempre 2 casas decimais
-            // ex: 45.0 → "45.00"
+            '$amountSign ${_formatNumber(amount)} €',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
               color: amountColor,
             ),
           ),
+          if (onDelete != null)
+            IconButton(
+              onPressed: onDelete,
+              tooltip: 'Eliminar transação',
+              icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+            ),
         ],
       ),
     );
+  }
+
+  // Formata com vírgula decimal e separador de milhar com espaço.
+  String _formatNumber(double value) {
+    final parts = value.toStringAsFixed(2).split('.');
+    final intPart = parts[0].replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]} ',
+    );
+    return '$intPart,${parts[1]}';
   }
 }

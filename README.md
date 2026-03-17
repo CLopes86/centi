@@ -62,11 +62,15 @@
 - [x] **Core**
   - [x] App Theme (Indigo + Gold palette)
   - [x] GoRouter (Centralized navigation)
-- [x] **Dashboard (UI completo — dados placeholder)**
+- [x] **Dashboard (UI completo — dados reais)**
   - [x] BalanceCard widget (estilo fintech — efeito vidro, setas néon)
   - [x] TransactionItem widget (ícones, cores receita/despesa)
-  - [x] Transactions list (placeholder data)
-  - [x] Header com gradiente indigo/roxo
+  - [x] Transactions list (Firestore em tempo real)
+  - [x] Header com gradiente indigo/roxo + nome real do utilizador
+  - [x] Data dinâmica em português
+  - [x] Ordenação por data (mais recentes primeiro)
+  - [x] Eliminar transações com confirmação
+  - [x] Aba Perfil com logout
   - [x] SingleChildScrollView (sem overflow)
   - [x] Pacote `intl` instalado (datas em português)
 
@@ -75,15 +79,15 @@
   - [x] Transaction entity (id, amount, type, category, date, userId)
   - [x] TransactionRepository interface
   - [x] Use Cases: AddTransaction, GetTransactions, DeleteTransaction
-- [ ] **Transactions Feature (Data Layer)**
-  - [ ] TransactionModel (fromFirestore, toFirestore)
-  - [ ] TransactionRemoteDataSource (Firestore calls)
-  - [ ] TransactionRepositoryImpl
+- [x] **Transactions Feature (Data Layer)** ✅
+  - [x] TransactionModel (fromFirestore, toFirestore)
+  - [x] TransactionRemoteDataSource (Firestore calls)
+  - [x] TransactionRepositoryImpl
 - [ ] **Dashboard — Pendente após Transactions**
-  - [ ] Data dinâmica + nome real do utilizador
-  - [ ] Drawer lateral moderno (perfil, definições, MVP Portugal)
+  - [x] Data dinâmica + nome real do utilizador
+  - [x] Drawer lateral moderno (perfil, definições, MVP Portugal)
   - [ ] Speed Dial FAB (↑ Receita / ↓ Despesa)
-  - [ ] Dados reais do Firestore
+  - [x] Dados reais do Firestore
 
 ### 🔮 Planned (MVP Portugal)
 
@@ -298,16 +302,20 @@ lib/
 - `GetTransactions` — Stream em tempo real por userId
 - `DeleteTransaction` — apaga pelo id
 
-### Presentation Layer - Dashboard Feature 🚧 70%
+### Presentation Layer - Dashboard Feature 🚧 90%
 
 **Widgets**
 - BalanceCard: efeito vidro, gradiente, setas néon, formato europeu ✅
 - TransactionItem: ícone circular, cor por tipo ✅
 
 **Screens**
-- DashboardScreen: header gradiente + scroll + lista placeholder ✅
-- Data dinâmica + nome utilizador 🚧
-- Drawer lateral + Speed Dial FAB 🚧 (aguarda Transactions)
+- DashboardScreen: header gradiente + scroll + lista com Firestore em tempo real ✅
+- Data dinâmica + nome utilizador ✅
+- Ordenação por data (mais recentes primeiro) ✅
+- Eliminar transações com confirmação ✅
+- Aba Perfil com logout ✅
+- Drawer lateral moderno (perfil, definições, MVP Portugal) ✅
+- Speed Dial FAB (↑ Receita / ↓ Despesa) 🚧
 
 ---
 
@@ -322,13 +330,15 @@ lib/
 - [x] Authentication screens (Login/Register/Splash)
 - [x] GoRouter centralized navigation
 
-### Phase 2 - Core Features (Week 3-4) 🚧 60%
+### Phase 2 - Core Features (Week 3-4) 🚧 80%
 - [x] Dashboard base with BalanceCard and TransactionItem
 - [x] Dashboard redesign moderno (gradiente + scroll + fintech style)
 - [x] **Transactions Domain Layer** (entity + repository + use cases)
-- [ ] **Transactions Data Layer** (Firestore + model)
-- [ ] **Transactions Presentation** (Speed Dial + formulário + providers)
-- [ ] Dashboard com dados reais + Drawer + Perfil
+- [x] **Transactions Data Layer** (Firestore + model)
+- [x] **Transactions Presentation** (formulário + providers)
+- [x] Dashboard com dados reais + Perfil
+- [ ] Speed Dial de ações rápidas (receita/despesa)
+- [x] Drawer lateral moderno
 - [ ] Category system
 - [ ] Basic statistics
 

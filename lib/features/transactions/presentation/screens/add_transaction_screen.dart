@@ -7,6 +7,11 @@
 // ============================================
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
+import 'package:centi/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:centi/features/transactions/domain/entities/transaction.dart';
+import 'package:centi/features/transactions/presentation/controllers/transaction_controller.dart';
 
 class AddTransactionScreen extends ConsumerStatefulWidget {
   const AddTransactionScreen({super.key});
@@ -22,6 +27,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   bool _isExpense = true;
   String _selectedCategory = '';
   DateTime _selectedDate = DateTime.now();
+  bool _isSaving = false; // Controla o estado de loading do botão
 
   // ─── CORES DO BRANDING (mesmas do splash e app_theme) ───
   // Definidas aqui como static const para reutilizar no build()
@@ -54,6 +60,107 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     _amountController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  // ─── MÉTODO: GUARDAR TRANSAÇÃO ───
+  // Chamado quando o utilizador toca no botão "Guardar Transação"
+  Future<void> _guardarTransacao() async {
+    // 1. VALIDAÇÃO — verificar se os campos obrigatórios estão preenchidos
+    final amountText = _amountController.text.trim();
+
+    if (amountText.isEmpty) {
+      // ScaffoldMessenger mostra uma SnackBar (mensagem temporária no fundo)
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Introduz um valor')));
+      return; // Sai do método sem guardar
+    }
+
+    // double.tryParse — tenta converter o texto para número
+    // Retorna null se não for um número válido (ex: "abc")
+    final amount = double.tryParse(amountText.replaceAll(',', '.'));
+    // ↑ replaceAll(',', '.') — substitui vírgula por ponto (ex: "12,50" → "12.50")
+
+    if (amount == null || amount <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Valor inválido')));
+      return;
+    }
+
+    if (_selectedCategory.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Seleciona uma categoria')));
+      return;
+    }
+
+    // 2. OBTER O UTILIZADOR AUTENTICADO
+    final authState = ref.read(authControllerProvider);
+    final user = authState.when(
+      data: (u) => u,
+      loading: () => null,
+      error: (_, __) => null,
+    );
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro: sessão expirada. Faz login novamente.'),
+        ),
+      );
+      return;
+    }
+
+    // 3. MOSTRAR LOADING — desativa o botão e mostra spinner
+    setState(() => _isSaving = true);
+
+    try {
+      // 4. CRIAR O OBJETO Transaction
+      final transaction = Transaction(
+        id: const Uuid().v4(),
+        // ↑ Uuid().v4() gera um ID único universalmente (ex: "550e8400-e29b-41d4-a716-446655440000")
+        // É o padrão para gerar IDs sem depender do servidor
+        userId: user.id,
+        amount: amount,
+        type: _isExpense ? TransactionType.expense : TransactionType.income,
+        // ↑ Converte o bool _isExpense para o enum TransactionType
+        category: _selectedCategory,
+        description: _descriptionController.text.trim(),
+        date: _selectedDate,
+      );
+
+      // 5. ENVIAR PARA O FIRESTORE via controller
+      await ref
+          .read(transactionControllerProvider.notifier)
+          .addTransaction(transaction);
+
+      // 6. VOLTAR AO DASHBOARD com mensagem de sucesso
+      if (mounted) {
+        // mounted — verifica se o widget ainda está na árvore de widgets
+        // Importante verificar antes de usar context após um await
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Transação guardada com sucesso!'),
+            backgroundColor: Color(0xFF10B981), // Verde de receita
+          ),
+        );
+        context.pop(); // Volta à página anterior (Dashboard)
+      }
+    } catch (e) {
+      // 7. ERRO — mostrar mensagem e reativar o botão
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro ao guardar: $e')));
+      }
+    } finally {
+      // finally — corre SEMPRE, com erro ou sem erro
+      // Garante que o botão volta ao normal mesmo que algo falhe
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
   }
 
   @override
@@ -434,9 +541,8 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Parte 7 — validação e envio para Firestore
-                },
+                // Se _isSaving=true, passa null ao onPressed — desativa o botão
+                onPressed: _isSaving ? null : _guardarTransacao,
                 style: ElevatedButton.styleFrom(
                   // Transparente para deixar o gradiente do Container visível
                   backgroundColor: Colors.transparent,
@@ -445,20 +551,30 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.check_circle_outline, size: 22),
-                    SizedBox(width: 8),
-                    Text(
-                      'Guardar Transação',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                child: _isSaving
+                    // Enquanto guarda, mostra um spinner em vez do texto
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle_outline, size: 22),
+                          SizedBox(width: 8),
+                          Text(
+                            'Guardar Transação',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
 
