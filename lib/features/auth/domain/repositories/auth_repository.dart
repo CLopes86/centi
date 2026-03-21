@@ -41,4 +41,17 @@ abstract class AuthRepository {
   /// Retorna [User] se houver um utilizador autenticado.
   /// Retorna `null` se não houver utilizador autenticado.
   Future<User?> getCurrentUser();
+
+  /// Atualiza o nome de exibição do utilizador autenticado.
+  ///
+  /// Retorna o [User] atualizado.
+  Future<User> updateDisplayName(String displayName);
+
+  /// Atualiza a foto de perfil (URL) do utilizador autenticado.
+  ///
+  /// Retorna o [User] atualizado.
+  Future<User> updatePhotoUrl(String photoUrl);
+
+  /// Atualiza a password do utilizador autenticado.
+  Future<void> updatePassword(String newPassword);
 }

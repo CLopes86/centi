@@ -31,6 +31,38 @@ class AuthRemoteDataSource {
     await firebaseAuth.signOut();
   }
 
+  Future<void> updateDisplayName(String displayName) async {
+    final user = firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw StateError('Utilizador não autenticado');
+    }
+
+    await user.updateDisplayName(displayName);
+    await user.reload();
+  }
+
+  Future<void> updatePhotoUrl(String photoUrl) async {
+    final user = firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw StateError('Utilizador não autenticado');
+    }
+
+    await user.updatePhotoURL(photoUrl);
+    await user.reload();
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    final user = firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw StateError('Utilizador não autenticado');
+    }
+
+    await user.updatePassword(newPassword);
+  }
+
   User? getCurrentUser() {
     return firebaseAuth.currentUser;
   }

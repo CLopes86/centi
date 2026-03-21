@@ -59,4 +59,35 @@ class AuthRepositoryImpl implements AuthRepository {
 
     return userModel;
   }
+
+  @override
+  Future<User> updateDisplayName(String displayName) async {
+    await dataSource.updateDisplayName(displayName);
+
+    final firebaseUser = dataSource.getCurrentUser();
+
+    if (firebaseUser == null) {
+      throw StateError('Utilizador não autenticado');
+    }
+
+    return UserModel.fromFirebase(firebaseUser);
+  }
+
+  @override
+  Future<User> updatePhotoUrl(String photoUrl) async {
+    await dataSource.updatePhotoUrl(photoUrl);
+
+    final firebaseUser = dataSource.getCurrentUser();
+
+    if (firebaseUser == null) {
+      throw StateError('Utilizador não autenticado');
+    }
+
+    return UserModel.fromFirebase(firebaseUser);
+  }
+
+  @override
+  Future<void> updatePassword(String newPassword) async {
+    await dataSource.updatePassword(newPassword);
+  }
 }

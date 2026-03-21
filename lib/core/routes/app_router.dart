@@ -12,6 +12,7 @@ import 'package:centi/features/auth/presentation/screens/login_screen.dart';
 import 'package:centi/features/auth/presentation/screens/register_screen.dart';
 import 'package:centi/features/auth/presentation/screens/splash_screen.dart';
 import 'package:centi/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:centi/features/transactions/domain/entities/transaction.dart';
 import 'package:centi/features/transactions/presentation/screens/add_transaction_screen.dart';
 
 // Import do controller de autenticação para saber se o utilizador está logado
@@ -75,7 +76,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/addtransaction',
-        builder: (context, state) => const AddTransactionScreen(),
+        builder: (context, state) {
+          final type = state.uri.queryParameters['type'];
+
+          final initialType = switch (type) {
+            'income' => TransactionType.income,
+            'expense' => TransactionType.expense,
+            _ => null,
+          };
+
+          return AddTransactionScreen(initialType: initialType);
+        },
       ),
     ],
   );

@@ -15,6 +15,9 @@ class User {
   /// Nome de exibição do utilizador (opcional).
   final String? displayName;
 
+  /// URL da foto de perfil do utilizador (opcional).
+  final String? photoUrl;
+
   /// Cria uma instância de [User].
   ///
   /// Valida que:
@@ -23,7 +26,12 @@ class User {
   /// - [email] contém o caractere '@'
   ///
   /// Lança [ArgumentError] se alguma validação falhar.
-  User({required this.id, required this.email, this.displayName}) {
+  User({
+    required this.id,
+    required this.email,
+    this.displayName,
+    this.photoUrl,
+  }) {
     if (id.isEmpty) {
       throw ArgumentError('ID não pode estar vazio');
     }
@@ -46,11 +54,17 @@ class User {
   /// final user = User(id: '123', email: 'joao@email.com');
   /// final userAtualizado = user.copyWith(displayName: 'João Silva');
   /// ```
-  User copyWith({String? id, String? email, String? displayName}) {
+  User copyWith({
+    String? id,
+    String? email,
+    String? displayName,
+    String? photoUrl,
+  }) {
     return User(
       id: id ?? this.id,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 }

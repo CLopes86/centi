@@ -13,6 +13,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/entities/user.dart';
+import '../../domain/usecases/update_password.dart';
+import '../../domain/usecases/update_display_name.dart';
+import '../../domain/usecases/update_photo_url.dart';
 import '../../domain/usecases/login_user.dart';
 import '../../domain/usecases/get_current_user.dart';
 import '../providers/auth_providers.dart';
@@ -183,6 +186,68 @@ class AuthController extends _$AuthController {
       state = const AsyncValue.data(null);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
+  Future<void> updateDisplayName(String displayName) async {
+    final trimmedName = displayName.trim();
+
+    if (trimmedName.isEmpty) {
+      throw ArgumentError('Nome não pode estar vazio');
+    }
+
+    state = const AsyncValue.loading();
+
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final updateDisplayNameUseCase = UpdateDisplayName(repository);
+      final updatedUser = await updateDisplayNameUseCase.call(trimmedName);
+      state = AsyncValue.data(updatedUser);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<void> updatePhotoUrl(String photoUrl) async {
+    final trimmedUrl = photoUrl.trim();
+
+    if (trimmedUrl.isEmpty) {
+      throw ArgumentError('URL da foto não pode estar vazia');
+    }
+
+    state = const AsyncValue.loading();
+
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final updatePhotoUrlUseCase = UpdatePhotoUrl(repository);
+      final updatedUser = await updatePhotoUrlUseCase.call(trimmedUrl);
+      state = AsyncValue.data(updatedUser);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    final trimmedPassword = newPassword.trim();
+
+    if (trimmedPassword.length < 6) {
+      throw ArgumentError('A password deve ter pelo menos 6 caracteres');
+    }
+
+    state = const AsyncValue.loading();
+
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final updatePasswordUseCase = UpdatePassword(repository);
+      await updatePasswordUseCase.call(trimmedPassword);
+
+      final refreshedUser = await ref.read(getCurrentUserProvider).call();
+      state = AsyncValue.data(refreshedUser);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+      rethrow;
     }
   }
 

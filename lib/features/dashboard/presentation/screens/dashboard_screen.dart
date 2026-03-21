@@ -24,6 +24,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   // 1. Variável de Estado: Guarda qual o separador (tab) selecionado
   int _selectedIndex = 0;
+  bool _isFabMenuOpen = false;
+  bool _isPrivacyModeEnabled = false;
 
   List<Widget> get _screens => [
     Consumer(
@@ -258,55 +260,236 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               );
             }
 
-            return Padding(
-              padding: const EdgeInsets.all(24),
+            return Container(
+              color: const Color(0xFFF9FAFB),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Perfil',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                    padding: const EdgeInsets.only(bottom: 32),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFFF7ED),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(32),
+                        bottomRight: Radius.circular(32),
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _displayName(user),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedIndex = 0;
+                                    _isFabMenuOpen = false;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_back_rounded,
+                                  color: Color(0xFF1F2937),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: _profileImageProvider(user),
+                                  child: _hasProfilePhoto(user)
+                                      ? null
+                                      : Text(
+                                          _userInitial(_displayName(user)),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF6366F1),
+                                            fontSize: 32,
+                                          ),
+                                        ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () => _showEditPhotoDialog(user),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF6366F1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _displayName(user),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1F2937),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () => _showEditNameDialog(user),
+                                  icon: const Icon(
+                                    Icons.edit_rounded,
+                                    size: 18,
+                                    color: Color(0xFF6B7280),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              user.email,
+                              style: const TextStyle(
+                                color: Color(0xFF9CA3AF),
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              children: [
+                                _buildStatCard(
+                                  icon: Icons.calendar_today_rounded,
+                                  label: 'Desde',
+                                  value: 'Mar 2024',
+                                  color: const Color(0xFF6366F1),
+                                ),
+                                const SizedBox(width: 12),
+                                _buildStatCard(
+                                  icon: Icons.receipt_long_rounded,
+                                  label: 'Movimentos',
+                                  value: '142',
+                                  color: const Color(0xFF10B981),
+                                ),
+                                const SizedBox(width: 12),
+                                _buildStatCard(
+                                  icon: Icons.emoji_events_rounded,
+                                  label: 'Nível',
+                                  value: 'Bronze',
+                                  color: const Color(0xFFF59E0B),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          user.email,
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await ref.read(authControllerProvider.notifier).logout();
-                    },
-                    icon: const Icon(Icons.logout),
-                    label: const Text('Terminar sessão'),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.all(24),
+                      children: [
+                        _buildProfileSection(
+                          title: 'CONTA E PREFERÊNCIAS',
+                          children: [
+                            _buildProfileTile(
+                              icon: Icons.person_outline_rounded,
+                              title: 'Alterar Nome',
+                              onTap: () => _showEditNameDialog(user),
+                            ),
+                            _buildProfileTile(
+                              icon: Icons.category_outlined,
+                              title: 'Categorias',
+                              onTap: () => _showComingSoon('Categorias'),
+                            ),
+                            _buildProfileTile(
+                              icon: Icons.attach_money_rounded,
+                              title: 'Moeda',
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'EUR (€)',
+                                    style: TextStyle(
+                                      color: Color(0xFF6B7280),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: Color(0xFF9CA3AF),
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                              onTap: () => _showComingSoon('Moeda'),
+                            ),
+                          ],
+                        ),
+                        _buildProfileSection(
+                          title: 'SEGURANÇA',
+                          children: [
+                            _buildPrivacySwitch(),
+                            _buildProfileTile(
+                              icon: Icons.fingerprint_rounded,
+                              title: 'Biometria',
+                              onTap: () => _showComingSoon('Biometria'),
+                            ),
+                            _buildProfileTile(
+                              icon: Icons.lock_outline_rounded,
+                              title: 'Alterar Senha',
+                              onTap: _showChangePasswordDialog,
+                            ),
+                          ],
+                        ),
+                        _buildProfileSection(
+                          title: 'DADOS E SUPORTE',
+                          children: [
+                            _buildProfileTile(
+                              icon: Icons.download_rounded,
+                              title: 'Exportar Dados',
+                              onTap: () => _showComingSoon('Exportar Dados'),
+                            ),
+                            _buildProfileTile(
+                              icon: Icons.info_outline_rounded,
+                              title: 'Sobre o Centi',
+                              onTap: () => _showComingSoon('Sobre'),
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: TextButton.icon(
+                            onPressed: () async {
+                              await ref
+                                  .read(authControllerProvider.notifier)
+                                  .logout();
+                            },
+                            icon: const Icon(
+                              Icons.logout_rounded,
+                              color: Color(0xFFEF4444),
+                              size: 18,
+                            ),
+                            label: const Text(
+                              'Terminar Sessão',
+                              style: TextStyle(
+                                color: Color(0xFFEF4444),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -323,9 +506,38 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       drawer: _buildDashboardDrawer(),
       body: _screens[_selectedIndex],
       floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              onPressed: () => context.push('/addtransaction'),
-              child: const Icon(Icons.add),
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (_isFabMenuOpen) ...[
+                  FloatingActionButton.small(
+                    heroTag: 'fab_income',
+                    backgroundColor: const Color(0xFF10B981),
+                    onPressed: () {
+                      _toggleFabMenu();
+                      context.push('/addtransaction?type=income');
+                    },
+                    child: const Icon(Icons.arrow_upward),
+                  ),
+                  const SizedBox(height: 10),
+                  FloatingActionButton.small(
+                    heroTag: 'fab_expense',
+                    backgroundColor: const Color(0xFFEF4444),
+                    onPressed: () {
+                      _toggleFabMenu();
+                      context.push('/addtransaction?type=expense');
+                    },
+                    child: const Icon(Icons.arrow_downward),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                FloatingActionButton(
+                  heroTag: 'fab_main',
+                  onPressed: _toggleFabMenu,
+                  child: Icon(_isFabMenuOpen ? Icons.close : Icons.add),
+                ),
+              ],
             )
           : null,
     );
@@ -596,6 +808,203 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     }
   }
 
+  Future<void> _showEditNameDialog(User user) async {
+    final controller = TextEditingController(text: user.displayName ?? '');
+
+    final newName = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar nome'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            labelText: 'Nome de exibição',
+            hintText: 'Ex: Cesaltino Lopes',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+
+    if (newName == null || newName.isEmpty) {
+      return;
+    }
+
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .updateDisplayName(newName);
+
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nome atualizado com sucesso.')),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao atualizar nome: $e')));
+    }
+  }
+
+  Future<void> _showEditPhotoDialog(User user) async {
+    final controller = TextEditingController(text: user.photoUrl ?? '');
+
+    final newPhotoUrl = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Alterar foto de perfil'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          keyboardType: TextInputType.url,
+          decoration: const InputDecoration(
+            labelText: 'URL da foto',
+            hintText: 'https://...',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+
+    if (newPhotoUrl == null || newPhotoUrl.isEmpty) {
+      return;
+    }
+
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .updatePhotoUrl(newPhotoUrl);
+
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Foto atualizada com sucesso.')),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao atualizar foto: $e')));
+    }
+  }
+
+  Future<void> _showChangePasswordDialog() async {
+    final passwordController = TextEditingController();
+    final confirmController = TextEditingController();
+
+    final newPassword = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Mudar senha'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Nova senha',
+                hintText: 'Mínimo 6 caracteres',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: confirmController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Confirmar senha'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () {
+              final pass = passwordController.text.trim();
+              final confirm = confirmController.text.trim();
+
+              if (pass.isEmpty || confirm.isEmpty || pass != confirm) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Confirmação de senha inválida.'),
+                  ),
+                );
+                return;
+              }
+
+              Navigator.of(context).pop(pass);
+            },
+            child: const Text('Atualizar'),
+          ),
+        ],
+      ),
+    );
+
+    if (newPassword == null || newPassword.isEmpty) {
+      return;
+    }
+
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .updatePassword(newPassword);
+
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Senha atualizada com sucesso.')),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Erro ao mudar senha: $e\nPodes precisar de relogar para confirmar identidade.',
+          ),
+        ),
+      );
+    }
+  }
+
   // ─── HELPER: Converte o nome da categoria no ícone correspondente ───
   // Usado para mostrar o ícone correto em cada TransactionItem
   IconData _categoryIcon(String category) {
@@ -648,8 +1057,28 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return '${date.day} de ${months[date.month]} de ${date.year}';
   }
 
+  void _toggleFabMenu() {
+    setState(() {
+      _isFabMenuOpen = !_isFabMenuOpen;
+    });
+  }
+
   String _shortDatePt(DateTime date) {
     return '${date.day} ${_monthName(date.month)}';
+  }
+
+  bool _hasProfilePhoto(User user) {
+    final photoUrl = user.photoUrl?.trim();
+    return photoUrl != null && photoUrl.isNotEmpty;
+  }
+
+  ImageProvider? _profileImageProvider(User user) {
+    final photoUrl = user.photoUrl?.trim();
+    if (photoUrl == null || photoUrl.isEmpty) {
+      return null;
+    }
+
+    return NetworkImage(photoUrl);
   }
 
   String _userInitial(String name) {
@@ -658,6 +1087,212 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       return 'C';
     }
     return trimmed.substring(0, 1).toUpperCase();
+  }
+
+  Widget _buildProfileSection({
+    required String title,
+    required List<Widget> children,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF6B7280),
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              for (int i = 0; i < children.length; i++) ...[
+                children[i],
+                if (i < children.length - 1)
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Colors.grey.withOpacity(0.1),
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildProfileTile({
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    Color? iconColor,
+    VoidCallback? onTap,
+    Widget? trailing,
+  }) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: (iconColor ?? const Color(0xFF6366F1)).withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(
+          icon,
+          color: iconColor ?? const Color(0xFF6366F1),
+          size: 20,
+        ),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF1F2937),
+          fontSize: 15,
+        ),
+      ),
+      subtitle: subtitle != null
+          ? Text(
+              subtitle,
+              style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 13),
+            )
+          : null,
+      trailing:
+          trailing ??
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: Color(0xFF9CA3AF),
+            size: 20,
+          ),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildStatCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrivacySwitch() {
+    return SwitchListTile(
+      value: _isPrivacyModeEnabled,
+      activeColor: const Color(0xFF6366F1),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      secondary: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (child, anim) => RotationTransition(
+          turns: child.key == const ValueKey('icon1')
+              ? Tween<double>(begin: 1, end: 0.75).animate(anim)
+              : Tween<double>(begin: 0.75, end: 1).animate(anim),
+          child: ScaleTransition(scale: anim, child: child),
+        ),
+        child: Container(
+          key: ValueKey(_isPrivacyModeEnabled ? 'icon2' : 'icon1'),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color:
+                (_isPrivacyModeEnabled
+                        ? const Color(0xFF10B981)
+                        : const Color(0xFF6366F1))
+                    .withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            _isPrivacyModeEnabled
+                ? Icons.visibility_off_rounded
+                : Icons.visibility_rounded,
+            color: _isPrivacyModeEnabled
+                ? const Color(0xFF10B981)
+                : const Color(0xFF6366F1),
+            size: 20,
+          ),
+        ),
+      ),
+      title: const Text(
+        'Modo Privacidade',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF1F2937),
+          fontSize: 15,
+        ),
+      ),
+      subtitle: const Text(
+        'Ocultar valores na Home',
+        style: TextStyle(color: Color(0xFF9CA3AF), fontSize: 13),
+      ),
+      onChanged: (val) {
+        setState(() => _isPrivacyModeEnabled = val);
+      },
+    );
   }
 
   String _displayName(User? user) {

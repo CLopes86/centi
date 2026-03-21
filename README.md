@@ -70,9 +70,17 @@
   - [x] Data dinâmica em português
   - [x] Ordenação por data (mais recentes primeiro)
   - [x] Eliminar transações com confirmação
-  - [x] Aba Perfil com logout
+  - [x] Speed Dial FAB (↑ Receita / ↓ Despesa)
   - [x] SingleChildScrollView (sem overflow)
   - [x] Pacote `intl` instalado (datas em português)
+- [x] **Profile & Settings**
+  - [x] **UI Redesign**: "Fintech Clean" style (Revolut/N26 inspired)
+  - [x] **Identity**: Custom avatar with camera button, dynamic greeting
+  - [x] **Edit Profile**: Update Name, Photo URL
+  - [x] **Security**: Change Password functionality
+  - [x] **Privacy Mode**: Toggle switch (UI animation done)
+  - [x] **Stats Badges**: "Since", "Movements", "Level" (Gamification stub)
+  - [x] **Navigation**: Custom back button logic, smooth transitions
 
 ### 🚧 In Progress
 - [x] **Transactions Feature (Domain Layer)** ✅
@@ -86,7 +94,6 @@
 - [ ] **Dashboard — Pendente após Transactions**
   - [x] Data dinâmica + nome real do utilizador
   - [x] Drawer lateral moderno (perfil, definições, MVP Portugal)
-  - [ ] Speed Dial FAB (↑ Receita / ↓ Despesa)
   - [x] Dados reais do Firestore
 
 ### 🔮 Planned (MVP Portugal)
@@ -315,7 +322,7 @@ lib/
 - Eliminar transações com confirmação ✅
 - Aba Perfil com logout ✅
 - Drawer lateral moderno (perfil, definições, MVP Portugal) ✅
-- Speed Dial FAB (↑ Receita / ↓ Despesa) 🚧
+- Speed Dial FAB (↑ Receita / ↓ Despesa) ✅
 
 ---
 
@@ -330,14 +337,14 @@ lib/
 - [x] Authentication screens (Login/Register/Splash)
 - [x] GoRouter centralized navigation
 
-### Phase 2 - Core Features (Week 3-4) 🚧 80%
+### Phase 2 - Core Features (Week 3-4) 🚧 85%
 - [x] Dashboard base with BalanceCard and TransactionItem
 - [x] Dashboard redesign moderno (gradiente + scroll + fintech style)
 - [x] **Transactions Domain Layer** (entity + repository + use cases)
 - [x] **Transactions Data Layer** (Firestore + model)
 - [x] **Transactions Presentation** (formulário + providers)
 - [x] Dashboard com dados reais + Perfil
-- [ ] Speed Dial de ações rápidas (receita/despesa)
+- [x] Speed Dial de ações rápidas (receita/despesa)
 - [x] Drawer lateral moderno
 - [ ] Category system
 - [ ] Basic statistics

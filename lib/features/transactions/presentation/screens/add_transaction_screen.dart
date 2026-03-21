@@ -14,7 +14,9 @@ import 'package:centi/features/transactions/domain/entities/transaction.dart';
 import 'package:centi/features/transactions/presentation/controllers/transaction_controller.dart';
 
 class AddTransactionScreen extends ConsumerStatefulWidget {
-  const AddTransactionScreen({super.key});
+  final TransactionType? initialType;
+
+  const AddTransactionScreen({super.key, this.initialType});
 
   @override
   ConsumerState<AddTransactionScreen> createState() =>
@@ -54,6 +56,16 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     {'name': 'Freelance', 'icon': Icons.work},
     {'name': 'Outros', 'icon': Icons.category},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Quando vem do Speed Dial, pré-seleciona Receita ou Despesa.
+    if (widget.initialType != null) {
+      _isExpense = widget.initialType == TransactionType.expense;
+    }
+  }
 
   @override
   void dispose() {
